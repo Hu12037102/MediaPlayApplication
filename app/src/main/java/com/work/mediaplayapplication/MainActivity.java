@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SeekBar;
 
 import java.util.IllegalFormatCodePointException;
 
@@ -15,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     private Button mBtnPlayPause;
     private Button mBtnStop;
     private MediaPlayerHelp mMediaPlayer;
+    private SeekBar mSbPlay;
 
 
     @Override
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private void initView() {
         mBtnPlayPause = findViewById(R.id.btn_play_pause);
         mBtnStop = findViewById(R.id.btn_stop);
+        mSbPlay = findViewById(R.id.sb_play);
     }
 
     private void initData() {
@@ -63,7 +67,24 @@ public class MainActivity extends AppCompatActivity {
         mMediaPlayer.setOnMediaPlayerCallback(new MediaPlayerHelp.OnMediaPlayerCallback() {
             @Override
             public void onPrepare(@NonNull MediaPlayer mediaPlayer) {
+                Log.w("mMediaPlayer",mediaPlayer.getDuration()+"--");
+                mSbPlay.setMax(mediaPlayer.getDuration());
+            }
+        });
+        mSbPlay.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                mMediaPlayer.setSeek(progress);
+            }
 
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                mMediaPlayer.pause();
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                mMediaPlayer.start();
             }
         });
     }

@@ -139,7 +139,8 @@ public class MediaPlayerHelp implements MediaPlayer.OnPreparedListener, MediaPla
         }
         return false;
     }
-    public boolean isCanPlay(){
+
+    public boolean isCanPlay() {
         return mPlayHelpStatus == MediaPlayerHelp.ON_PAUSE || mPlayHelpStatus == MediaPlayerHelp.ON_CREATED;
     }
 
@@ -174,6 +175,12 @@ public class MediaPlayerHelp implements MediaPlayer.OnPreparedListener, MediaPla
             mMediaPlayer.pause();
         }
         Log.w("MediaPlayerHelp", "pause:" + "---" + mPlayHelpStatus + "--" + mMediaPlayer.isPlaying());
+    }
+
+    public void setSeek(int duration) {
+        if (mMediaPlayer != null) {
+            mMediaPlayer.seekTo(duration);
+        }
     }
 
     public void start() {
