@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        mMediaPlayer = MediaPlayerHelper.getInstance(this);
+        mMediaPlayer = MediaPlayerHelper.create(this);
         mMediaPlayer.prepare(R.raw.xiangqinxiangai);
     }
 

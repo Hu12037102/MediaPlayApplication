@@ -43,7 +43,7 @@ public class VideoActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        mMediaPlayer = MediaPlayerHelper.getInstance(this);
+        mMediaPlayer = MediaPlayerHelper.create(this);
         mMediaPlayer.setVideoSize(getResources().getDisplayMetrics().widthPixels, dp2px(this, 250));
         mMediaPlayer.prepare("http://cdn.sbnh.cn/VID_20200714_190812.mp4");
 

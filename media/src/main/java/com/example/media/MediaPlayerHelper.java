@@ -23,8 +23,6 @@ import java.io.IOException;
  * 描述:
  */
 public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener, MediaPlayer.OnVideoSizeChangedListener {
-    @SuppressLint("StaticFieldLeak")
-    private static MediaPlayerHelper mInstance = new MediaPlayerHelper();
     private MediaPlayer mMediaPlayer;
     @SuppressLint("StaticFieldLeak")
     private static Context mContext;
@@ -55,8 +53,8 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener, MediaP
     private int mPlayerMode;
     private boolean mIsPreparePlay;
     private SurfaceView mSurfaceView;
-    private int mVideoWidth ;
-    private int mVideoHeight ;
+    private int mVideoWidth;
+    private int mVideoHeight;
 
     public MediaPlayer getMediaPlayer() {
         return mMediaPlayer;
@@ -69,13 +67,17 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener, MediaP
     //
     public OnMediaPlayerCallback onMediaPlayerCallback;
 
-    private MediaPlayerHelper() {
-
+    private MediaPlayerHelper(Context context) {
+        mContext = context.getApplicationContext();
     }
 
-    public synchronized static MediaPlayerHelper getInstance(Context context) {
+    /*public synchronized static MediaPlayerHelper getInstance(Context context) {
         mContext = context.getApplicationContext();
         return mInstance;
+    }*/
+
+    public static MediaPlayerHelper create(@NonNull Context context) {
+        return new MediaPlayerHelper(context);
     }
 
     private void init() {
@@ -229,6 +231,9 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener, MediaP
     public void onCompletion(MediaPlayer mp) {
         mPlayHelpStatus = MediaPlayerHelper.ON_PAUSE;
         mMediaPlayer.start();
+        if (onMediaPlayerCallback != null) {
+            onMediaPlayerCallback.onCompletion(mp);
+        }
         Log.w("MediaPlayerHelp", "onCompletion:" + mMediaPlayer.isLooping() + "---" + mPlayHelpStatus);
     }
 
@@ -240,7 +245,7 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener, MediaP
     @Override
     public void onVideoSizeChanged(MediaPlayer mediaPlayer, int width, int height) {
         if (width > 0 && height > 0 && mSurfaceView != null) {
-            if (mVideoWidth == 0){
+            if (mVideoWidth == 0) {
                 mVideoWidth = mContext.getResources().getDisplayMetrics().widthPixels;
                 mVideoHeight = ViewGroup.LayoutParams.WRAP_CONTENT;
             }
@@ -266,7 +271,6 @@ public class MediaPlayerHelper implements MediaPlayer.OnPreparedListener, MediaP
         default void onVideoSizeChanged(MediaPlayer mediaPlayer, int i, int i1) {
         }
     }
-
 
 
 }
