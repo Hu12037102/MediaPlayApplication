@@ -9,15 +9,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
-
-import java.util.IllegalFormatCodePointException;
+import com.example.media.MediaPlayerHelper;
 
 public class MainActivity extends AppCompatActivity {
 
     private Button mBtnPlayPause;
     private Button mBtnStop;
-    private MediaPlayerHelp mMediaPlayer;
+    private MediaPlayerHelper mMediaPlayer;
     private SeekBar mSbPlay;
+
 
 
     @Override
@@ -33,10 +33,11 @@ public class MainActivity extends AppCompatActivity {
         mBtnPlayPause = findViewById(R.id.btn_play_pause);
         mBtnStop = findViewById(R.id.btn_stop);
         mSbPlay = findViewById(R.id.sb_play);
+
     }
 
     private void initData() {
-        mMediaPlayer = MediaPlayerHelp.getInstance().setContext(this);
+        mMediaPlayer = MediaPlayerHelper.getInstance(this);
         mMediaPlayer.prepare(R.raw.xiangqinxiangai);
     }
 
@@ -45,10 +46,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int status = mMediaPlayer.getPlayHelpStatus();
-                if (status == MediaPlayerHelp.ON_PLAYING) {
+                if (status == MediaPlayerHelper.ON_PLAYING) {
                     mMediaPlayer.pause();
                     mBtnPlayPause.setText("播放");
-                } else if (status == MediaPlayerHelp.ON_STOP) {
+                } else if (status == MediaPlayerHelper.ON_STOP) {
                     mBtnPlayPause.setText("暂停");
                     mMediaPlayer.prepare(R.raw.xiangqinxiangai, true);
                 } else if (mMediaPlayer.isCanPlay()) {
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 mBtnPlayPause.setText("播放");
             }
         });
-        mMediaPlayer.setOnMediaPlayerCallback(new MediaPlayerHelp.OnMediaPlayerCallback() {
+        mMediaPlayer.setOnMediaPlayerCallback(new MediaPlayerHelper.OnMediaPlayerCallback() {
             @Override
             public void onPrepare(@NonNull MediaPlayer mediaPlayer) {
                 Log.w("mMediaPlayer",mediaPlayer.getDuration()+"--");
